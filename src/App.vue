@@ -160,7 +160,7 @@
         @filtered="onFiltered"
     >
       <template #cell(index)="data">
-        {{ data.index + 1 }}
+        {{ (data.index + (perPage * (currentPage - 1))) + 1 }}
       </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
