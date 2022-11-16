@@ -162,6 +162,9 @@
       <template #cell(index)="data">
         {{ (data.index + (perPage * (currentPage - 1))) + 1 }}
       </template>
+      <template #cell(releasedate)="data">
+        {{ data.value == 'Invalid date' ? '-' : data.value }}
+      </template>
       <template #table-busy>
         <div class="text-center text-danger my-2">
           <b-spinner class="align-middle"></b-spinner>
@@ -184,7 +187,7 @@
             <li v-for="(value, key) in row.item" :key="key">
               <b-row class="mb-2">
                 <b-col sm="2" class="text-sm-right"><b>{{ key }}:</b></b-col>
-                <b-col>{{ value }}</b-col>
+                <b-col>{{ value == 'Invalid date' ? '-' : value }}</b-col>
               </b-row>
             </li>
           </ul>
@@ -202,6 +205,7 @@
 <script>
 import axios from "axios";
 import X2JS from "x2js";
+import moment from "moment";
 
 export default {
   data() {
@@ -210,7 +214,8 @@ export default {
       fields: [
         {key: 'index', label: 'No'},
         {key: 'name', label: 'Name', sortable: true},
-        {key: 'region', label: 'Region', sortable: true},
+        {key: 'region', label: 'Region', sortable: true, class: 'text-center'},
+        {key: 'releasedate', label: 'Release', sortable: true, class: 'text-center'},
         {key: 'publisher', label: 'Publisher', sortable: true},
         {key: 'genre', label: 'Genre', sortable: true},
         {key: 'actions', label: 'Actions'}
@@ -361,7 +366,24 @@ export default {
         .then(response => {
           const x2js = new X2JS();
           const document = x2js.xml2js(response.data);
-          this.items = document.gameList.game
+          this.items = document.gameList.game.map((game) => {
+            return {
+              'id':game.id,
+              'path':game.path,
+              'name':game.name,
+              'desc':game.desc,
+              'image':game.image,
+              'marquee':game.marquee,
+              'thumbnail':game.thumbnail,
+              'releasedate': moment(game.releasedate, 'YYYYMMDDTHHmmss').format('YYYY'),
+              'players':game.players,
+              'developer':game.developer,
+              'publisher':game.publisher,
+              'genre':game.genre,
+              'lang':game.lang,
+              'region':game.region,
+            }
+          })
           this.isBusy = false
           this.totalRows = this.items.length
         })
@@ -394,7 +416,24 @@ export default {
           .then(response => {
             const x2js = new X2JS();
             const document = x2js.xml2js(response.data);
-            this.items = document.gameList.game
+            this.items = document.gameList.game.map((game) => {
+              return {
+                'id':game.id,
+                'path':game.path,
+                'name':game.name,
+                'desc':game.desc,
+                'image':game.image,
+                'marquee':game.marquee,
+                'thumbnail':game.thumbnail,
+                'releasedate': moment(game.releasedate, 'YYYYMMDDTHHmmss').format('YYYY'),
+                'players':game.players,
+                'developer':game.developer,
+                'publisher':game.publisher,
+                'genre':game.genre,
+                'lang':game.lang,
+                'region':game.region,
+              }
+            })
             this.isBusy = false
             this.totalRows = this.items.length
           })
