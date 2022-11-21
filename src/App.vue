@@ -184,16 +184,30 @@
       </template>
 
       <template #row-details="row">
-        <b-card>
-          <ul style="list-style-type: none;">
-            <li v-for="(value, key) in row.item" :key="key">
-              <b-row class="mb-2">
-                <b-col sm="2" class="text-sm-right"><b>{{ key }}:</b></b-col>
-                <b-col>{{ value == 'Invalid date' ? '-' : value }}</b-col>
-              </b-row>
-            </li>
-          </ul>
-        </b-card>
+        <div style="display: flex;justify-content: center;">
+          <b-card
+            no-body
+            style="max-width: 25rem;"
+            img-top
+          >
+            <b-img-lazy :src="getImageUrl(row.item.id)" rounded="top" fluid alt="image"></b-img-lazy>
+            <b-card-body>
+              <b-card-title>{{ row.item.name }}</b-card-title>
+              <b-card-sub-title class="mb-2">{{ row.item.publisher }} | {{ row.item.developer }} | <b>{{ row.item.release || '-' }}</b></b-card-sub-title>
+              <b-card-text>
+                {{ row.item.desc }}
+              </b-card-text>
+            </b-card-body>
+
+            <b-list-group flush>
+              <b-list-group-item class="text-center"><b>{{ row.item.genre || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Rating: <b>{{ row.item.rating || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Region: <b>{{ row.item.region || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Language: <b>{{ row.item.lang || '-'  }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Player: <b>{{ row.item.player || '-' }}</b></b-list-group-item>
+            </b-list-group>
+          </b-card>
+        </div>
       </template>
     </b-table>
 
@@ -377,8 +391,10 @@ export default {
         .then(response => {
           const x2js = new X2JS();
           const document = x2js.xml2js(response.data);
+          console.log(document.gameList);
           this.items = document.gameList.game.map((game) => {
             return {
+              'id':game._id,
               'path':game.path,
               'name':game.name,
               'desc':game.desc,
@@ -438,6 +454,9 @@ export default {
     },
     onPerPageChanged(e) {
       localStorage.setItem('perPage', e.target.value)
+    },
+    getImageUrl(imageId) {
+      return `https://www.screenscraper.fr/image.php?gameid=${imageId}&media=sstitle&hd=0&region=wor&maxwidth=720&maxheight=360`
     }
   },
   watch: {
