@@ -193,18 +193,18 @@
             <b-img-lazy :src="getImageUrl(row.item.id)" rounded="top" fluid alt="image"></b-img-lazy>
             <b-card-body>
               <b-card-title>{{ row.item.name }}</b-card-title>
-              <b-card-sub-title class="mb-2">{{ row.item.publisher }} | {{ row.item.developer }} | <b>{{ row.item.release || '-' }}</b></b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.publisher }} | <b>{{ row.item.releasedate || '-' }}</b></b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.genre || '-' }}</b-card-sub-title>
               <b-card-text>
                 {{ row.item.desc }}
               </b-card-text>
             </b-card-body>
 
             <b-list-group flush>
-              <b-list-group-item class="text-center"><b>{{ row.item.genre || '-' }}</b></b-list-group-item>
               <b-list-group-item class="text-center">Rating: <b>{{ row.item.rating || '-' }}</b></b-list-group-item>
               <b-list-group-item class="text-center">Region: <b>{{ row.item.region || '-' }}</b></b-list-group-item>
               <b-list-group-item class="text-center">Language: <b>{{ row.item.lang || '-'  }}</b></b-list-group-item>
-              <b-list-group-item class="text-center">Player: <b>{{ row.item.player || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Player: <b>{{ row.item.players || '-' }}</b></b-list-group-item>
             </b-list-group>
           </b-card>
         </div>
@@ -262,7 +262,6 @@ export default {
             {value: 'mame', text: 'MAME', platform: 'Arcade'},
             {value: 'neogeo', text: 'NEO•GEO MVS', platform: 'Arcade'},
             {value: 'atomiswave', text: 'Sammy Atomiswave', platform: 'Arcade'},
-            {value: 'model1', text: 'Sega Model 1', platform: 'Arcade'},
             {value: 'model2', text: 'Sega Model 2', platform: 'Arcade'},
             {value: 'model3', text: 'Sega Model 3', platform: 'Arcade'},
             {value: 'naomi', text: 'Sega NAOMI', platform: 'Arcade'},
