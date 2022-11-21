@@ -65,6 +65,7 @@
                 id="sort-by-select"
                 v-model="sortBy"
                 :options="sortOptions"
+                :onchange="onSortByChanged"
                 :aria-describedby="ariaDescribedby"
                 class="w-75"
             >
@@ -73,6 +74,7 @@
             <b-form-select
                 v-model="sortDesc"
                 :disabled="!sortBy"
+                :onchange="onSortDescChanged"
                 :aria-describedby="ariaDescribedby"
                 size="sm"
                 class="w-25"
@@ -121,6 +123,7 @@
               id="per-page-select"
               v-model="perPage"
               :options="pageOptions"
+              :onchange="onPerPageChanged"
               size="sm"
           ></b-form-select>
           <span class="text-info small">Total: <b>{{items.length}} game</b></span>
@@ -222,7 +225,7 @@ export default {
       totalRows: 1,
       currentPage: 1,
       perPage: 25,
-      pageOptions: [25, 50, {value: 100, text: "Show all"}],
+      pageOptions: [25, 50, {value: 1000, text: "Show a lot"}],
       sortBy: 'name',
       sortDesc: false,
       sortDirection: 'asc',
@@ -360,8 +363,17 @@ export default {
     }
   },
   mounted() {
-    const baseURL = 'https://raw.githubusercontent.com/ramustha/batocera/main/';
-    axios.get(baseURL + this.platformSelected + '-gamelist.xml')
+    this.platformSelected = localStorage.getItem('platformSelected') || this.platformSelected
+    this.perPage = localStorage.getItem('perPage') || this.perPage
+    this.sortBy = localStorage.getItem('sortBy') || this.sortBy
+    this.sortDesc = localStorage.getItem('sortDesc') || this.sortDesc
+
+    this.fetchData()
+  },
+  methods: {
+    async fetchData() {
+      const baseURL = 'https://raw.githubusercontent.com/ramustha/batocera/main/';
+      axios.get(baseURL + this.platformSelected + '-gamelist.xml')
         .then(response => {
           const x2js = new X2JS();
           const document = x2js.xml2js(response.data);
@@ -386,14 +398,14 @@ export default {
           })
           this.isBusy = false
           this.totalRows = this.items.length
+          this.currentPage = localStorage.getItem('currentPage') || this.currentPage
         })
         .catch(error => {
           this.items = [];
           this.isBusy = false
           this.totalRows = this.items.length
         });
-  },
-  methods: {
+    },
     info(item, index, button) {
       this.infoModal.title = item.name
       this.infoModal.content = JSON.stringify(item, null, 2)
@@ -407,43 +419,33 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.currentPage = 1
+
+      localStorage.setItem('currentPage', this.currentPage)
     },
     onPlatformChanged(e) {
       this.isBusy = true;
       this.platformSelected = e.target.value
-      const baseURL = 'https://raw.githubusercontent.com/ramustha/batocera/main/';
-      axios.get(baseURL + this.platformSelected + '-gamelist.xml')
-          .then(response => {
-            const x2js = new X2JS();
-            const document = x2js.xml2js(response.data);
-            this.items = document.gameList.game.map((game) => {
-              return {
-                'path':game.path,
-                'name':game.name,
-                'desc':game.desc,
-                'image':game.image,
-                'marquee':game.marquee,
-                'thumbnail':game.thumbnail,
-                'releasedate': moment(game.releasedate, 'YYYYMMDDTHHmmss').format('YYYY'),
-                'players':game.players,
-                'developer':game.developer,
-                'publisher':game.publisher,
-                'genre':game.genre,
-                'lang':game.lang,
-                'region':game.region,
-              }
-            }).filter(function (game) {
-              return !game.name.includes('[DLC]')
-            })
-            this.isBusy = false
-            this.totalRows = this.items.length
-          })
-          .catch(error => {
-            this.items = [];
-            this.isBusy = false
-            this.totalRows = this.items.length
-          });
+      localStorage.setItem('currentPage', '1')
+      localStorage.setItem('platformSelected', this.platformSelected)
+
+      this.fetchData()
     },
+    onSortByChanged(e) {
+      localStorage.setItem('sortBy', e.target.value)
+    },
+    onSortDescChanged(e) {
+      localStorage.setItem('sortDesc', e.target.value)
+    },
+    onPerPageChanged(e) {
+      localStorage.setItem('perPage', e.target.value)
+    }
+  },
+  watch: {
+    currentPage: {
+      handler: function(newValue){
+        localStorage.setItem('currentPage', newValue)
+      }
+    }
   }
 }
 </script>
