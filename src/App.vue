@@ -190,22 +190,45 @@
             style="max-width: 25rem;"
             img-top
           >
-            <b-img-lazy :src="getImageUrl(row.item.id)" rounded="top" fluid alt="image"></b-img-lazy>
+            <b-img-lazy :src="getImageUrl(row.item.id, 'box-2D')" alt="Image"></b-img-lazy>
             <b-card-body>
               <b-card-title>{{ row.item.name }}</b-card-title>
-              <b-card-sub-title class="mb-2">{{ row.item.publisher }} | <b>{{ row.item.releasedate || '-' }}</b></b-card-sub-title>
-              <b-card-sub-title class="mb-2">{{ row.item.genre || '-' }}</b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.publisher || '-' }}</b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.releasedate || '-' }}</b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.genre || '-' }} <span class="float-right">{{ row.item.id || '-' }}</span></b-card-sub-title>
               <b-card-text>
-                {{ row.item.desc }}
+                {{ row.item.desc || '-' }}
               </b-card-text>
             </b-card-body>
 
             <b-list-group flush>
-              <b-list-group-item class="text-center">Rating: <b>{{ row.item.rating || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Players: <b>{{ row.item.players || '-' }}</b></b-list-group-item>
               <b-list-group-item class="text-center">Region: <b>{{ row.item.region || '-' }}</b></b-list-group-item>
               <b-list-group-item class="text-center">Language: <b>{{ row.item.lang || '-'  }}</b></b-list-group-item>
-              <b-list-group-item class="text-center">Player: <b>{{ row.item.players || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">{{ row.item.path }}</b-list-group-item>
             </b-list-group>
+
+            <b-card-footer>
+              <b-row cols-sm="5" class="text-center" style="font-size: 2rem;" >
+                <div v-for="index in 5" :key="index">
+                  <div v-if="((row.item.rating*100/20) > index)">
+                    <b-col class="ms-1">
+                      <b-icon icon="star-fill" font-scale="0.5"></b-icon>
+                    </b-col>
+                  </div>
+                  <div v-else-if="((row.item.rating*100/20) % 1) > 0 && (row.item.rating*100/20) + 1 > index">
+                    <b-col class="ms-1">
+                      <b-icon icon="star-half" font-scale="0.5"></b-icon>
+                    </b-col>
+                  </div>
+                  <div v-else>
+                    <b-col class="ms-1">
+                      <b-icon icon="star" font-scale="0.5"></b-icon>
+                    </b-col>
+                  </div>
+                </div>
+              </b-row>
+            </b-card-footer>
           </b-card>
         </div>
       </template>
@@ -255,7 +278,7 @@ export default {
         {
           label: 'Arcade',
           options: [
-            {value: 'cave3rd', text: 'CAVE CV1000/CV1000-B/CV1000-D/3rd/SH-3', platform: 'Arcade'},
+            {value: 'cave3rd', text: 'CAVE CV1000', platform: 'Arcade'},
             {value: 'daphne', text: 'DAPHNE (Laserdisc)', platform: 'Arcade'},
             {value: 'fbneo', text: 'FinalBurn Neo', platform: 'Arcade'},
             {value: 'gaelco', text: 'Gaelco', platform: 'Arcade'},
@@ -283,14 +306,14 @@ export default {
             {value: 'atari5200', text: 'Atari 5200', platform: 'Home console'},
             {value: 'atari7800', text: 'Atari 7800', platform: 'Home console'},
             {value: 'jaguar', text: 'Atari Jaguar', platform: 'Home console'},
-            {value: 'astrocde', text: 'Bally Astrocade/Arcade/ABA-1000', platform: 'Home console'},
-            {value: 'pv1000', text: 'Casio PV-1000/ぴーぶいせん/Pi Bui-Sen', platform: 'Home console'},
+            {value: 'astrocde', text: 'Bally Astrocade/ABA-1000', platform: 'Home console'},
+            {value: 'pv1000', text: 'Casio PV-1000', platform: 'Home console'},
             {value: 'cdi', text: 'Compact Disc Interactive/CD-i', platform: 'Home console'},
             {value: 'colecovision', text: 'ColecoVision', platform: 'Home console'},
             {value: 'amigacdtv', text: 'Commodore CDTV', platform: 'Home console'},
             {value: 'crvision', text: 'CreatiVision', platform: 'Home console'},
             {value: 'channelf', text: 'Fairchild Channel F', platform: 'Home console'},
-            {value: 'fds', text: 'Family Computer Disk System/Famicom', platform: 'Home console'},
+            {value: 'fds', text: 'Family Computer Disk System', platform: 'Home console'},
             {value: 'intellivision', text: 'Intellivision', platform: 'Home console'},
             {value: 'lowresnx', text: 'Lowres', platform: 'Home console'},
             {value: 'odyssey2', text: 'Odyssey²', platform: 'Home console'},
@@ -407,6 +430,7 @@ export default {
               'genre':game.genre,
               'lang':game.lang,
               'region':game.region,
+              'rating':game.rating,
             }
           }).filter(function (game) {
             return !game.name.includes('[DLC]')
@@ -454,8 +478,8 @@ export default {
     onPerPageChanged(e) {
       localStorage.setItem('perPage', e.target.value)
     },
-    getImageUrl(imageId) {
-      return `https://www.screenscraper.fr/image.php?gameid=${imageId}&media=sstitle&hd=0&region=wor&maxwidth=720&maxheight=360`
+    getImageUrl(imageId, media) {
+      return `https://www.screenscraper.fr/image.php?gameid=${imageId}&media=${media}&hd=0&region=wor&maxwidth=720&maxheight=360`
     }
   },
   watch: {
