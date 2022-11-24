@@ -348,7 +348,7 @@ export default {
             {value: 'scv', text: 'Super Cassette Vision', platform: 'Home console'},
             {value: 'sgb', text: 'Super Game Boy', platform: 'Home console'},
             {value: 'supracan', text: 'Super A\'Can', platform: 'Home console'},
-            {value: 'snes_msu-1', text: 'Super NES CD-ROM/SNES MSU-1', platform: 'Home console'},
+            {value: 'snes_msu1', text: 'Super NES CD-ROM/SNES MSU-1', platform: 'Home console'},
             {value: 'tic80', text: 'TIC-80', platform: 'Home console'},
             {value: 'uzebox', text: 'Uzebox', platform: 'Home console'},
             {value: 'vsmile', text: 'V.Smile', platform: 'Home console'},
