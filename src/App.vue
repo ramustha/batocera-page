@@ -175,9 +175,9 @@
       </template>
 
       <template #cell(actions)="row">
-        <!--          <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">-->
-        <!--            Info modal-->
-        <!--          </b-button>-->
+<!--        <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+          Info modal
+        </b-button>-->
         <b-button size="sm" @click="row.toggleDetails">
           {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
         </b-button>
@@ -190,23 +190,20 @@
             style="max-width: 25rem;"
             img-top
           >
-            <b-img-lazy :src="getImageUrl(row.item.id, 'box-2D')" alt="Image"></b-img-lazy>
-            <b-card-body>
-              <b-card-title>{{ row.item.name }}</b-card-title>
-              <b-card-sub-title class="mb-2">{{ row.item.publisher || '-' }}</b-card-sub-title>
-              <b-card-sub-title class="mb-2">{{ row.item.releasedate || '-' }}</b-card-sub-title>
-              <b-card-sub-title class="mb-2">{{ row.item.genre || '-' }} <span class="float-right">{{ row.item.id || '-' }}</span></b-card-sub-title>
-              <b-card-text>
-                {{ row.item.desc || '-' }}
-              </b-card-text>
-            </b-card-body>
-
-            <b-list-group flush>
-              <b-list-group-item class="text-center">Players: <b>{{ row.item.players || '-' }}</b></b-list-group-item>
-              <b-list-group-item class="text-center">Region: <b>{{ row.item.region || '-' }}</b></b-list-group-item>
-              <b-list-group-item class="text-center">Language: <b>{{ row.item.lang || '-'  }}</b></b-list-group-item>
-              <b-list-group-item class="text-center">{{ row.item.path }}</b-list-group-item>
-            </b-list-group>
+            <b-carousel
+              id="carousel-fade"
+              style="text-shadow: 0px 0px 2px #000; min-width: 320px; min-height: 360px;"
+              fade
+              controls
+              indicators
+            >
+              <b-carousel-slide
+                :img-src="getImageUrl(row.item.id, 'sstitle')"
+              ></b-carousel-slide>
+              <b-carousel-slide
+                :img-src="getImageUrl(row.item.id, 'ss')"
+              ></b-carousel-slide>
+            </b-carousel>
 
             <b-card-footer>
               <b-row cols-sm="5" class="text-center" style="font-size: 2rem;" >
@@ -229,6 +226,25 @@
                 </div>
               </b-row>
             </b-card-footer>
+
+            <b-card-body>
+              <b-card-title>{{ row.item.name }}</b-card-title>
+              <b-card-sub-title class="mb-2">{{ row.item.publisher || '-' }}</b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.releasedate || '-' }}</b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.genre || '-' }} <span class="float-right">{{ row.item.id || '-' }}</span></b-card-sub-title>
+              <b-card-text>
+                {{ row.item.desc || '-' }}
+              </b-card-text>
+            </b-card-body>
+
+            <b-list-group flush>
+              <b-list-group-item class="text-center">Players: <b>{{ row.item.players || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Region: <b>{{ row.item.region || '-' }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">Language: <b>{{ row.item.lang || '-'  }}</b></b-list-group-item>
+              <b-list-group-item class="text-center">{{ row.item.path }}</b-list-group-item>
+            </b-list-group>
+
+
           </b-card>
         </div>
       </template>
@@ -236,7 +252,7 @@
 
     <!-- Info modal -->
     <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-      <pre>{{ infoModal.content }}</pre>
+      <pre>{{ infoModal.content.id }}</pre>
     </b-modal>
   </b-container>
 </template>
@@ -385,7 +401,7 @@ export default {
           ]
         }
       ],
-      platformSelected: 'mame',
+      platformSelected: 'mame'
     }
   },
   computed: {
@@ -431,9 +447,11 @@ export default {
               'lang':game.lang,
               'region':game.region,
               'rating':game.rating,
+              'platform': this.platformSelected
             }
           }).filter(function (game) {
             return !game.name.includes('[DLC]')
+              && !game.name.includes('ZZZ(notgame)')
           })
           this.isBusy = false
           this.totalRows = this.items.length
@@ -447,7 +465,7 @@ export default {
     },
     info(item, index, button) {
       this.infoModal.title = item.name
-      this.infoModal.content = JSON.stringify(item, null, 2)
+      this.infoModal.content = item
       this.$root.$emit('bv::show::modal', this.infoModal.id, button)
     },
     resetInfoModal() {
@@ -479,7 +497,7 @@ export default {
       localStorage.setItem('perPage', e.target.value)
     },
     getImageUrl(imageId, media) {
-      return `https://www.screenscraper.fr/image.php?gameid=${imageId}&media=${media}&hd=0&region=wor&maxwidth=720&maxheight=360`
+      return `https://www.screenscraper.fr/image.php?gameid=${imageId}&media=${media}&hd=0&region=wor&num=&version=&maxwidth=720&maxheight=360`
     }
   },
   watch: {
