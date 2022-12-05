@@ -192,7 +192,7 @@
           >
             <b-carousel
               id="carousel-fade"
-              style="text-shadow: 0px 0px 2px #000; min-width: 320px; min-height: 360px;"
+              style="text-shadow: 0px 0px 2px #000; min-width: 260px; min-height: 320px;"
               fade
               controls
               indicators
