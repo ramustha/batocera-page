@@ -205,33 +205,33 @@
               ></b-carousel-slide>
             </b-carousel>
 
-            <b-card-footer>
-              <b-row cols-sm="5" class="text-center" style="font-size: 2rem;" >
-                <div v-for="index in 5" :key="index">
-                  <div v-if="((row.item.rating*100/20) > index)">
-                    <b-col class="ms-1">
-                      <b-icon icon="star-fill" font-scale="0.5"></b-icon>
-                    </b-col>
-                  </div>
-                  <div v-else-if="((row.item.rating*100/20) % 1) > 0 && (row.item.rating*100/20) + 1 > index">
-                    <b-col class="ms-1">
-                      <b-icon icon="star-half" font-scale="0.5"></b-icon>
-                    </b-col>
-                  </div>
-                  <div v-else>
-                    <b-col class="ms-1">
-                      <b-icon icon="star" font-scale="0.5"></b-icon>
-                    </b-col>
-                  </div>
-                </div>
-              </b-row>
-            </b-card-footer>
-
             <b-card-body>
               <b-card-title>{{ row.item.name }}</b-card-title>
               <b-card-sub-title class="mb-2">{{ row.item.publisher || '-' }}</b-card-sub-title>
+              <b-card-sub-title class="mb-2">{{ row.item.publisher || '-' }}</b-card-sub-title>
               <b-card-sub-title class="mb-2">{{ row.item.releasedate || '-' }}</b-card-sub-title>
               <b-card-sub-title class="mb-2">{{ row.item.genre || '-' }} <span class="float-right">{{ row.item.id || '-' }}</span></b-card-sub-title>
+              <b-card-title>
+                <b-row align-v="center" class="justify-content-md-center" style="padding: 0;" >
+                  <div v-for="index in 5" :key="index">
+                    <div v-if="((row.item.rating*100/20) > index)">
+                      <b-col cols="2">
+                        <b-icon icon="star-fill" font-scale="0.5"></b-icon>
+                      </b-col>
+                    </div>
+                    <div v-else-if="((row.item.rating*100/20) % 1) > 0 && (row.item.rating*100/20) + 1 > index">
+                      <b-col cols="2">
+                        <b-icon icon="star-half" font-scale="0.5"></b-icon>
+                      </b-col>
+                    </div>
+                    <div v-else>
+                      <b-col cols="2">
+                        <b-icon icon="star" font-scale="0.5"></b-icon>
+                      </b-col>
+                    </div>
+                  </div>
+                </b-row>
+              </b-card-title>
               <b-card-text>
                 {{ row.item.desc || '-' }}
               </b-card-text>
@@ -243,7 +243,6 @@
               <b-list-group-item class="text-center">Language: <b>{{ row.item.lang || '-'  }}</b></b-list-group-item>
               <b-list-group-item class="text-center">{{ row.item.path }}</b-list-group-item>
             </b-list-group>
-
 
           </b-card>
         </div>
@@ -314,17 +313,17 @@ export default {
           options: [
             {value: '3do', text: '3DO Interactive', platform: 'Home console'},
             {value: 'advision', text: 'Adventure Vision', platform: 'Home console'},
-            {value: 'apfm1000', text: 'APF-MP1000/MP-1000/M-1000', platform: 'Home console'},
-            {value: 'arcadia', text: 'Arcadia 2001/et al.', platform: 'Home console'},
+            {value: 'apfm1000', text: 'APF-MP1000', platform: 'Home console'},
+            {value: 'arcadia', text: 'Arcadia 2001', platform: 'Home console'},
             {value: 'amigacd32', text: 'Amiga CD32', platform: 'Home console'},
             {value: 'gx4000', text: 'Amstrad GX4000', platform: 'Home console'},
             {value: 'atari2600', text: 'Atari 2600/VCS', platform: 'Home console'},
             {value: 'atari5200', text: 'Atari 5200', platform: 'Home console'},
             {value: 'atari7800', text: 'Atari 7800', platform: 'Home console'},
             {value: 'jaguar', text: 'Atari Jaguar', platform: 'Home console'},
-            {value: 'astrocde', text: 'Bally Astrocade/ABA-1000', platform: 'Home console'},
+            {value: 'astrocde', text: 'Bally Astrocade', platform: 'Home console'},
             {value: 'pv1000', text: 'Casio PV-1000', platform: 'Home console'},
-            {value: 'cdi', text: 'Compact Disc Interactive/CD-i', platform: 'Home console'},
+            {value: 'cdi', text: 'Compact Disc Interactive', platform: 'Home console'},
             {value: 'colecovision', text: 'ColecoVision', platform: 'Home console'},
             {value: 'amigacdtv', text: 'Commodore CDTV', platform: 'Home console'},
             {value: 'crvision', text: 'CreatiVision', platform: 'Home console'},
@@ -334,10 +333,10 @@ export default {
             {value: 'lowresnx', text: 'Lowres', platform: 'Home console'},
             {value: 'odyssey2', text: 'Odyssey²', platform: 'Home console'},
             {value: 'pico8', text: 'PICO-8', platform: 'Home console'},
-            {value: 'pcenginecd', text: 'PC Engine CD-ROM²/TurboGrafx-CD', platform: 'Home console'},
-            {value: 'supergrafx', text: 'PC Engine SuperGrafx/SuperGrafx', platform: 'Home console'},
+            {value: 'pcenginecd', text: 'PC Engine CD-ROM²', platform: 'Home console'},
+            {value: 'supergrafx', text: 'PC Engine SuperGrafx', platform: 'Home console'},
             {value: 'pcengine', text: 'PC Engine/TurboGrafx-16', platform: 'Home console'},
-            {value: 'videopacplus', text: 'Philips Videopac+ G7400/G7420', platform: 'Home console'},
+            {value: 'videopacplus', text: 'Philips Videopac+', platform: 'Home console'},
             {value: 'xbox', text: 'Microsoft Xbox', platform: 'Home console'},
             {value: 'pcfx', text: 'NEC PC-FX', platform: 'Home console'},
             {value: 'neogeo', text: 'Neo Geo', platform: 'Home console'},
@@ -353,9 +352,9 @@ export default {
             {value: 'segacd', text: 'Sega CD/Mega CD', platform: 'Home console'},
             {value: 'megadrive', text: 'Sega Genesis/Mega Drive', platform: 'Home console'},
             {value: 'dreamcast', text: 'Sega Dreamcast', platform: 'Home console'},
-            {value: 'mastersystem', text: 'Sega Master System/Mark III', platform: 'Home console'},
+            {value: 'mastersystem', text: 'Sega Master System', platform: 'Home console'},
             {value: 'saturn', text: 'Sega Saturn', platform: 'Home console'},
-            {value: 'sg1000', text: 'Sega SG-1000/SG-1000 II/SC-3000', platform: 'Home console'},
+            {value: 'sg1000', text: 'Sega SG-1000', platform: 'Home console'},
             {value: 'socrates', text: 'Socrates', platform: 'Home console'},
             {value: 'psx', text: 'Sony PlayStation', platform: 'Home console'},
             {value: 'ps2', text: 'Sony PlayStation 2', platform: 'Home console'},
@@ -364,7 +363,7 @@ export default {
             {value: 'scv', text: 'Super Cassette Vision', platform: 'Home console'},
             {value: 'sgb', text: 'Super Game Boy', platform: 'Home console'},
             {value: 'supracan', text: 'Super A\'Can', platform: 'Home console'},
-            {value: 'snes_msu1', text: 'Super NES CD-ROM/SNES MSU-1', platform: 'Home console'},
+            {value: 'snes_msu1', text: 'Super NES CD-ROM', platform: 'Home console'},
             {value: 'tic80', text: 'TIC-80', platform: 'Home console'},
             {value: 'uzebox', text: 'Uzebox', platform: 'Home console'},
             {value: 'vsmile', text: 'V.Smile', platform: 'Home console'},
@@ -384,7 +383,7 @@ export default {
             {value: 'gba', text: 'Game Boy Advance', platform: 'Portable console'},
             {value: 'gbc', text: 'Game Boy Color', platform: 'Portable console'},
             {value: 'gamegear', text: 'Game Gear', platform: 'Portable console'},
-            {value: 'gmaster', text: 'Game Master//Super Game', platform: 'Portable console'},
+            {value: 'gmaster', text: 'Game Master', platform: 'Portable console'},
             {value: 'gamecom', text: 'Game.com', platform: 'Portable console'},
             {value: 'lcdgames', text: 'Handheld LCD Games', platform: 'Portable console'},
             {value: 'megaduck', text: 'Mega Duck/Cougar Boy', platform: 'Portable console'},
