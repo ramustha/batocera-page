@@ -129,7 +129,7 @@
           <span class="text-info small">Total: <b>{{items.length}} game</b></span>
         </b-form-group>
       </b-col>
-      <b-col sm="7" md="6" class="my-1">
+      <b-col sm="7" md="6" class="my-1" style="text-align: right">
         <b-pagination
             v-model="currentPage"
             :total-rows="totalRows"
@@ -138,6 +138,9 @@
             size="sm"
             class="my-0"
         ></b-pagination>
+        <b-link @click="info(platformSelected, items, $event.target)">
+          View in List
+        </b-link>
       </b-col>
     </b-row>
 
@@ -175,9 +178,6 @@
       </template>
 
       <template #cell(actions)="row">
-<!--        <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-          Info modal
-        </b-button>-->
         <b-button size="sm" @click="row.toggleDetails">
           {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
         </b-button>
@@ -250,8 +250,12 @@
     </b-table>
 
     <!-- Info modal -->
-    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-      <pre>{{ infoModal.content.id }}</pre>
+    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal" size="xl">
+      <div style="margin: 5px">
+        <b-row cols="5">
+          <b-col v-for="item in items">✅{{ item.name.toUpperCase().substr(0, 40) }}</b-col>
+        </b-row>
+      </div>
     </b-modal>
   </b-container>
 </template>
@@ -451,7 +455,11 @@ export default {
           }).filter(function (game) {
             return !game.name.includes('[DLC]')
               && !game.name.includes('ZZZ(notgame)')
-          })
+          }).filter((value, index, self) =>
+              index === self.findIndex((t) => (
+                t.name === value.name
+              ))
+          )
           this.isBusy = false
           this.totalRows = this.items.length
           this.currentPage = localStorage.getItem('currentPage') || this.currentPage
@@ -462,9 +470,9 @@ export default {
           this.totalRows = this.items.length
         });
     },
-    info(item, index, button) {
-      this.infoModal.title = item.name
-      this.infoModal.content = item
+    info(title, content, button) {
+      this.infoModal.title = title
+      this.infoModal.content = content
       this.$root.$emit('bv::show::modal', this.infoModal.id, button)
     },
     resetInfoModal() {
