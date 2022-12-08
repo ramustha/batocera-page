@@ -252,8 +252,8 @@
     <!-- Info modal -->
     <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal" size="xl">
       <div style="margin: 5px">
-        <b-row cols="5">
-          <b-col v-for="item in items">✅{{ item.name.toUpperCase().substr(0, 40) }}</b-col>
+        <b-row cols="2">
+          <b-col v-for="item in items">✅{{ item.name.toUpperCase().substr(0, 35) }}</b-col>
         </b-row>
       </div>
     </b-modal>
@@ -459,7 +459,9 @@ export default {
               index === self.findIndex((t) => (
                 t.name === value.name
               ))
-          )
+          ).sort(function(a, b) {
+            return a.name.localeCompare(b.name)
+          })
           this.isBusy = false
           this.totalRows = this.items.length
           this.currentPage = localStorage.getItem('currentPage') || this.currentPage
