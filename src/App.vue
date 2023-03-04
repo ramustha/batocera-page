@@ -7,6 +7,21 @@
 
   <b-container fluid>
     <!-- User Interface controls -->
+    <b-container>
+      <b-row class="text-center p-3">
+        <b-col>
+          <b-link class="m-3" target="_blank" href="https://shopee.co.id/product/16313289/2450701049/">
+            <b-img src="public/shopee.png" width="64"/>
+          </b-link>
+          <b-link class="m-3" target="_blank" href="https://www.tokopedia.com/atk110-official/batocera-game-portable-emulator-full-game-ps-xbox-sega-wii-n64-mame-32gb">
+            <b-img src="public/tokopedia.ico" width="64"/>
+          </b-link>
+          <b-link class="m-3" target="_blank" href="https://www.bukalapak.com/p/komputer/software-original/4hhrphj-jual-batocera-game-emulator-console-game-psx-ps2-xbox-sega-snes-wii-n64">
+            <b-img src="public/bukalapak.svg" width="64"/>
+          </b-link>
+        </b-col>
+      </b-row>
+    </b-container>
     <b-row>
       <b-col lg="6" class="my-1">
         <b-form-group
